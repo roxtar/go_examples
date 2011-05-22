@@ -1,3 +1,6 @@
+// Example go program which sums a bunch of prime numbers
+// This is done allegedly in parallel
+
 package main
 import "fmt"
 import "runtime"
@@ -28,23 +31,21 @@ func isprime(n int64) bool {
 
 
 func main() {
-	NPROCS := 4
+	NPROCS := 2
 	runtime.GOMAXPROCS(NPROCS)
 	var n int64 = 300000
-	var block_size int64 = n/int64(NPROCS)
 
-	ch := make(chan int64)
-
-	for i:=0; i < NPROCS; i++ {
-		go sum(int64(i)*block_size, int64(i+1)*block_size, ch)
-	}
-
-	var result int64  = 0
+	ch1 := make(chan int64)
+	ch2 := make(chan int64)
 	
-	for i:=0; i < NPROCS; i++ {
-		result += <- ch 
-	}
+	go sum(0, n/2, ch1)
+	go sum(n/2, n, ch2)
+	
+	sum1 := <-ch1
+	sum2 := <-ch2
 
+	result := sum1 + sum2
+	
 	fmt.Printf("%d \n",result)
 		
 }
