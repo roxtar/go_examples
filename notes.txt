@@ -1,0 +1,18 @@
+NOTES ON GO -- THE LANGUAGE
+
+website: http://golang.org
+http://blog.golang.org/
+
+-Created by Rob Pike, Ken Thompson (and Russ Cox)
+- Imperative, statically typed language
+- Semicolons after braces
+- Scala like declaration -- type follows variable name
+- Supports UTF-8 natively
+- 6g compiler for 64 bit, 8-g compiler for 32 bit. History from Plan 9.
+- Initializing declaration with :=
+- gccgo -- requires you to build the entire gcc with go enabled.
+- for is the only looping construct
+- runtime parallelism is not enabled by default in 6g. need to enable it
+  explicitly by setting environment variable GOMAXPROCS or import
+  runtime package and call runtime.GOMAXPROCS(NCPU).
+
