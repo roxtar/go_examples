@@ -1,7 +1,9 @@
 NOTES ON GO -- THE LANGUAGE
 
-website: http://golang.org
+website and references: 
+http://golang.org
 http://blog.golang.org/
+http://software.intel.com/en-us/blogs/2010/01/21/parallel-programming-talk-60-russ-cox-about-the-google-go-programming-language/
 
 -Created by Rob Pike, Ken Thompson (and Russ Cox)
 - Imperative, statically typed language
@@ -15,4 +17,55 @@ http://blog.golang.org/
 - runtime parallelism is not enabled by default in 6g. need to enable it
   explicitly by setting environment variable GOMAXPROCS or import
   runtime package and call runtime.GOMAXPROCS(NCPU).
+- the go keyword can call anonymous functions. See prime sieve example
 
+- Receivers always block until there is data to receive. If the
+  channel is unbuffered, the sender blocks until the receiver has
+  received the value. If the channel has a buffer, the sender blocks
+  only until the value has been copied to the buffer; if the buffer is
+  full, this means waiting until some receiver has retrieved a value.
+
+- Go does have shared memory support. Including mutexes, etc. But it's
+  explicitly discouraged. These are provided in the "sync" package. 
+
+- sync.WaitGroup: A WaitGroup waits for a collection of goroutines to finish.
+
+- sync.Once.Do: Do calls the function f if and only if the method is
+  being called for the first time with this receiver.
+
+- Condition variables
+
+- Channels are multi reader multi writer queues. If there are multiple
+  receivers on a single channel, then the messages sent will be
+  received by one of them. There is no way to broadcase messages from
+  a sender to many receivers built in within the language.
+
+- Message based system. It's a cross between a message passing actor
+  based system and something like pthreads.
+
+- Borrows from CSP, Occam and Erlang.
+
+- Garbage collection required for concurrency?
+
+- Channels of functions are possible!! https://groups.google.com/group/golang-nuts/browse_thread/thread/407202933c87a2e2/6e977766cf2cd867?lnk=gst&q=waitgroup#6e977766cf2cd867
+
+- Why does using GOMAXPROCS > 1 sometimes make my program slower?
+
+(This is specific to the gc compilers. See above.)
+
+It depends on the nature of your program. Programs that contain
+several goroutines that spend a lot of time communicating on channels
+will experience performance degradation when using multiple OS
+threads. This is because of the significant context-switching penalty
+involved in sending data between threads.
+
+Go's goroutine scheduler is not as good as it needs to be. In future,
+it should recognize such cases and optimize its use of OS threads. For
+now, GOMAXPROCS should be set on a per-application basis.
+
+
+- Goroutines are multiplexed on OS threads.
+
+- gccgo now supported with gcc 4.6. Not enabled by default. Use
+--enable-languages while configuring
+Go. http://gcc.gnu.org/gcc-4.6/changes.html

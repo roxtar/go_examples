@@ -30,7 +30,7 @@ func isprime(n int64) bool {
 func main() {
 	NPROCS := 4
 	runtime.GOMAXPROCS(NPROCS)
-	var n int64 = 300000
+	var n int64 = 100000
 	var block_size int64 = n/int64(NPROCS)
 
 	ch := make(chan int64)

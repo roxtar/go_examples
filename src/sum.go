@@ -27,6 +27,6 @@ func isprime(n int64) bool {
 	
 
 func main() {
-	result := sum(0, 300000)
+	result := sum(0, 100000)
 	fmt.Printf("%d \n",result)
 }
