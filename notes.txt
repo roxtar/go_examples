@@ -69,3 +69,28 @@ now, GOMAXPROCS should be set on a per-application basis.
 - gccgo now supported with gcc 4.6. Not enabled by default. Use
 --enable-languages while configuring
 Go. http://gcc.gnu.org/gcc-4.6/changes.html
+
+- Go supported on gdb
+
+- Non blocking communications operations gone -- select statement can
+  do them more cleanly from http://www.youtube.com/watch?v=-i0hat7pdpk
+
+- Find out what is "defer" Go's defer statement schedules a function
+  call (the deferred function) to be run immediately before the
+  function executing the defer returns. It's an unusual but effective
+  way to deal with situations such as resources that must be released
+  regardless of which path a function takes to return. The canonical
+  examples are unlocking a mutex or closing a file.
+
+- Find out what happens with "_"
+
+
+- Select has semantics derived from Newsqueak http://plan9.bell-labs.com/who/rsc/thread/newsqueak.pdf
+
+- RSC notes that https://groups.google.com/group/golang-nuts/browse_thread/thread/d12cdd9a6cb6da99/83c6c8fcb8595139?lnk=raot
+This is a popular split but hardly the only definition
+of those terms.  One reason we use the name goroutine
+is to avoid preconceptions about what those terms mean.
+For many people threads also connotes management by
+the operating system, while goroutines are managed first
+by the Go runtime. 
