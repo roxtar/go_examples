@@ -15,6 +15,8 @@ func do_map(a []int64, map_udf func(* int64)) {
 		go map_block(a, j*block_size, (j+1)*block_size, ch, map_udf)
 	}
 
+	// We simulate a "finish" by draining the channel
+
 	for j:=0; j < nprocs; j++ {
 		<- ch
 	}
@@ -40,10 +42,30 @@ func f(x * int64) {
 
 func do_reduce(a []int64) int64{
 	var total int64 = 0
-	for i:=0; i < n; i++ {
+	block_size := n/nprocs
+	ch := make(chan int64)
+	for j:=0; j < nprocs; j++ {
+		go reduce_block(a, j*block_size, (j+1)*block_size, ch)
+	}
+
+	for j:=0; j < nprocs; j++ {
+		total += <- ch
+	}
+
+	return total
+}
+
+func reduce_block (
+	a[] int64, 
+	start int,
+	end int,
+	ch chan int64) {
+	
+	var total int64 = 0
+	for i:=start; i < end; i++ {
 		total += a[i]
 	}
-	return total
+	ch <- total
 }
 
 func main() {

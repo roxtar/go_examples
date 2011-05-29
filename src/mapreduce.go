@@ -1,6 +1,6 @@
 package main
 import fmt "fmt"
-const n = 3000001
+const n = 3000000
 
 func do_map(a []int64, map_udf func(int64) int64) {
 	var i int64;
