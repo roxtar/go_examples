@@ -10,7 +10,6 @@ const nprocs = 4
 func do_map(a []int64, map_udf func(* int64)) {
 
 	block_size := n/nprocs;
-	//ch := make(chan bool, nprocs)
 
 	var wg sync.WaitGroup;
 
@@ -19,12 +18,7 @@ func do_map(a []int64, map_udf func(* int64)) {
 		go map_block(a, j*block_size, (j+1)*block_size, &wg, map_udf)
 	}
 
-	// We simulate a "finish" by draining the channel
-
 	wg.Wait()
-	// for j:=0; j < nprocs; j++ {
-	// 	<- ch
-	// }
 }
 
 func map_block(
@@ -32,13 +26,11 @@ func map_block(
 	start int,
 	end int,
 	wg *sync.WaitGroup,
-	//ch chan bool,
 	map_udf func(* int64)) {
 
 	for i:=start; i < end; i++ {
 		map_udf(&a[i])
 	}
-	//ch <- true
 	(*wg).Done()
 	
 }
