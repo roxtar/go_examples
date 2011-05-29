@@ -1,0 +1,89 @@
+\documentclass{beamer}
+\usetheme{Rochester}
+%\usetheme{Copenhagen}
+\usepackage{listings}
+
+\title{The Go Programming Language}
+\subtitle{http://www.golang.org \\ CS 239: Parallel Programming Languages}
+\author{Raghu Prabhakar \\ Rohit Kumar}
+\date{June 2, 2011}
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame} {Features}
+\begin{itemize}
+  \item Compiled, garbage collected, concurrent, statically typed,
+    imperative developed by Google
+  \item UTF-8 Support
+  \item Compilers: 6g, 8g, gcc 
+  \item Borrows from CSP, Occam and Erlang
+\end{itemize}
+\end{frame}
+
+\begin{frame} [fragile]
+\frametitle{Go-routines}
+\begin{itemize}
+  \item Go-routines $\approx$ \verb=async=
+\end{itemize}
+\begin{center}
+\begin{verbatim}
+                go mapblock(start, end)
+\end{verbatim}
+\end{center}
+\end{frame}
+
+\begin{frame} [fragile]
+\frametitle{Channels}
+\begin{itemize}
+\item Means to send and receive messages
+\item Channels are typed
+
+\begin{verbatim}
+        var ch = make(chan int64) 
+        ch <- 23 // send 
+        var v = <- ch // receive        
+\end{verbatim}
+
+\item Buffered and unbuffered
+\item Ubuffered -- block on send and receive
+\item Buffered  -- block on send only if buffer is full. Block on receive.
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Channels}
+\begin{itemize}
+\item Channels can be used to model \verb=finish= like behavior
+\end{itemize}
+\begin{verbatim}
+        var ch = make(chan bool)
+        for i:=0; i < n ; i++ {
+                go func() { 
+                        // do something
+                        ch <- true
+                } ()
+        }
+        // drain the channel
+        for i:=0; i < n; i++ {
+                <- ch
+        }
+        
+\end{verbatim}
+\end{frame}
+
+\begin{frame} {WaitGroup}
+
+\end{frame}
+
+\begin{frame} {Map Reduce}
+\end{frame}
+
+\begin{frame} {Parallel Prefix Sum}
+\end{frame}
+
+
+\end{document}
