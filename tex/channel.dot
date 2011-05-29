@@ -1,0 +1,8 @@
+digraph G {
+	rankdir=LR;
+	size="7.5, 7.5";
+	A -> B [weight = 8, label = "42"];
+	A [shape = box, label="ch -> 42"];
+	B [shape = box, label="i <- ch"];
+}
+	

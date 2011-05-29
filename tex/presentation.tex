@@ -1,7 +1,8 @@
 \documentclass{beamer}
-\usetheme{Rochester}
-%\usetheme{Copenhagen}
-\usepackage{listings}
+%\usetheme{Rochester}
+\usetheme{Copenhagen}
+%\usetheme{Madrid}
+\usepackage{graphicx}
 
 \title{The Go Programming Language}
 \subtitle{http://www.golang.org \\ CS 239: Parallel Programming Languages}
@@ -10,17 +11,30 @@
 \begin{document}
 
 \begin{frame}
+\begin{center}
+\includegraphics[width=1in]{gopher.png}
+\end{center}
 \titlepage
 \end{frame}
 
-\begin{frame} {Features}
+\begin{frame} {About Go}
 \begin{itemize}
+  \item Developed by Google. Released in 2009.
+  \item Rob Pike, Ken Thompson, Robert Griesemer
   \item Compiled, garbage collected, concurrent, statically typed,
-    imperative developed by Google
+    imperative. 
   \item UTF-8 Support
-  \item Compilers: 6g, 8g, gcc 
   \item Borrows from CSP, Occam and Erlang
+  \item Compilers: 6g, 8g, gcc 
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Concurrency}
+  \begin{itemize}
+    \item Go-routines
+    \item Channels
+    \item WaitGroup
+  \end{itemize}
 \end{frame}
 
 \begin{frame} [fragile]
@@ -40,15 +54,22 @@
 \begin{itemize}
 \item Means to send and receive messages
 \item Channels are typed
-
+\end{itemize}
 \begin{verbatim}
-        var ch = make(chan int64) 
-        ch <- 23 // send 
-        var v = <- ch // receive        
+        var ch = make(chan int) 
+        ch <- 42 // send 
+        var i = <- ch // receive        
 \end{verbatim}
+\begin{center}
+\includegraphics[width=2in]{channel.png}
+\end{center}
+\end{frame}
 
+\begin{frame}{Channels}
+
+\begin{itemize}
 \item Buffered and unbuffered
-\item Ubuffered -- block on send and receive
+\item Unbuffered -- block on send and receive
 \item Buffered  -- block on send only if buffer is full. Block on receive.
 
 \end{itemize}
@@ -67,12 +88,19 @@
                         ch <- true
                 } ()
         }
+\end{verbatim}
+\pause
+\begin{verbatim}
         // drain the channel
         for i:=0; i < n; i++ {
                 <- ch
         }
+        close(ch)
         
 \end{verbatim}
+\end{frame}
+
+\begin{frame}{Select}
 \end{frame}
 
 \begin{frame} {WaitGroup}
@@ -84,6 +112,5 @@
 
 \begin{frame} {Parallel Prefix Sum}
 \end{frame}
-
 
 \end{document}
