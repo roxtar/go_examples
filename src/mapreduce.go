@@ -2,10 +2,10 @@ package main
 import fmt "fmt"
 const n = 3000000
 
-func do_map(a []int64, map_udf func(int64) int64) {
+func do_map(a []int64) {
 	var i int64;
 	for i=0; i < n; i++ {
-		a[i] = map_udf(a[i])
+		a[i] = f(a[i])
 	}
 }
 
@@ -27,6 +27,6 @@ func main() {
 	for i = 0; i < n; i++ {
 		a[i] = i;
 	}
-	do_map(a, f)
+	do_map(a)
 	fmt.Printf("%v \n", do_reduce(a))
 }

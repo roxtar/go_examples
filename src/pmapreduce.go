@@ -6,13 +6,13 @@ import (
 const n = 3000000
 const nprocs = 4
 
-func do_map(a []int64, map_udf func(* int64)) {
+func do_map(a []int64) {
 
 	block_size := n/nprocs;
 	ch := make(chan bool, nprocs)	
 
 	for j:=0; j < nprocs; j++ {
-		go map_block(a, j*block_size, (j+1)*block_size, ch, map_udf)
+		go map_block(a, j*block_size, (j+1)*block_size, ch)
 	}
 
 	// We simulate a "finish" by draining the channel
@@ -28,10 +28,10 @@ func map_block(
 	start int,
 	end int,
 	ch chan bool,
-	map_udf func(* int64)) {
+	) {
 
 	for i:=start; i < end; i++ {
-		map_udf(&a[i])
+		a[i] = f(a[i])
 	}
 	ch <- true
 }
@@ -65,8 +65,8 @@ func reduce_block (
 	ch <- total
 }
 
-func f(x * int64) {
-	*x = *x * *x
+func f(x  int64) int64{
+	return x * x
 }
 
 
@@ -77,6 +77,6 @@ func main() {
 	for i = 0; i < n; i++ {
 		a[i] = i;
 	}
-	do_map(a, f)
+	do_map(a)
 	fmt.Printf("%v \n", do_reduce(a))
 }
