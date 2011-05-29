@@ -9,7 +9,7 @@ const nprocs = 4
 func do_map(a []int64, map_udf func(* int64)) {
 
 	block_size := n/nprocs;
-	ch := make(chan bool)
+	ch := make(chan bool, nprocs)
 
 	for j:=0; j < nprocs; j++ {
 		go map_block(a, j*block_size, (j+1)*block_size, ch, map_udf)
@@ -34,10 +34,6 @@ func map_block(
 	}
 	ch <- true
 	
-}
-
-func f(x * int64) {
-	*x = *x * *x
 }
 
 func do_reduce(a []int64) int64{
@@ -67,6 +63,11 @@ func reduce_block (
 	}
 	ch <- total
 }
+
+func f(x * int64) {
+	*x = *x * *x
+}
+
 
 func main() {
 	runtime.GOMAXPROCS(nprocs)

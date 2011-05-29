@@ -9,7 +9,7 @@ func do_map(a []int64, map_udf func(int64) int64) {
 	}
 }
 
-func f(x int64) int64 {
+func f(x int64) int64{
 	return x*x
 }
 
