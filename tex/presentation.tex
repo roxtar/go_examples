@@ -50,8 +50,8 @@
 \end{verbatim}
 \end{center}
 \begin{itemize}
-\item Starts \verb=mapblock= in a new thread
-\item \verb=mapblock= becomes a go-routine
+\item Starts function \verb=mapblock= in a new thread with arguments \verb=start= and \verb=end=
+\item \verb=mapblock= is called a go-routine
 \end{itemize}
 
 \end{frame}
@@ -131,9 +131,9 @@
 \begin{frame}[fragile] 
 \frametitle{Map Reduce}
 \begin{itemize}
-  \item Sequential version
-  \item Implemented $\frac{n}{k}$ version of map reduce using arrays
-  \item Streaming version of map reduce using channels
+  \item Sequential
+  \item $\frac{n}{k}$ version of map reduce using arrays
+  \item Streaming map reduce using channels
 \end{itemize}
 \end{frame}
 
@@ -146,7 +146,7 @@
 \item The \verb=select= statement
 \item sync.Once.Do
 \item Locks and mutexes
-\item Other things in the \verb=sync= package
+\item More in the \verb=sync= package
 \end{itemize}
 \end{frame}
 
