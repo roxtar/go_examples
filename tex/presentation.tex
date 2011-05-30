@@ -31,28 +31,34 @@
 
 \begin{frame}{Concurrency}
   \begin{itemize}
-    \item Go-routines
-    \item Channels
-    \item WaitGroup
+    \item Go statement -- spawn threads
+    \item Channels -- send and receive messages
+    \item Others -- WaitGroup, do.Once, etc
   \end{itemize}
 \end{frame}
 
 \begin{frame} [fragile]
 \frametitle{Go-routines}
 \begin{itemize}
-  \item Go-routines $\approx$ \verb=async=
+  \item \verb=go= statement $\approx$ \verb=async= in X10
 \end{itemize}
 \begin{center}
 \begin{verbatim}
                 go mapblock(start, end)
 \end{verbatim}
 \end{center}
+\begin{itemize}
+\item Starts \verb=mapblock= in a new thread
+\item \verb=mapblock= becomes a go-routine
+\item Need to call \verb=runtime.GOMAXPROCS= to run on multiple processors
+\end{itemize}
+
 \end{frame}
 
 \begin{frame} [fragile]
 \frametitle{Channels}
 \begin{itemize}
-\item Means to send and receive messages
+\item Used to send and receive messages
 \item Channels are typed
 \end{itemize}
 \begin{verbatim}
@@ -100,17 +106,29 @@
 \end{verbatim}
 \end{frame}
 
-\begin{frame}{Select}
-\end{frame}
 
 \begin{frame} {WaitGroup}
 
 \end{frame}
 
-\begin{frame} {Map Reduce}
+\begin{frame}[fragile] 
+\frametitle{Map Reduce}
+\begin{itemize}
+  \item Implemented $\frac{n}{k}$ version of map reduce
+\end{itemize}
 \end{frame}
 
 \begin{frame} {Parallel Prefix Sum}
+\end{frame}
+
+\begin{frame} [fragile]
+\frametitle{Other Things}
+\begin{itemize}
+\item The \verb=select= statement
+\item do.Once
+\item Locks and mutexes
+\item Other things in the \verb=sync= package
+\end{itemize}
 \end{frame}
 
 \end{document}
