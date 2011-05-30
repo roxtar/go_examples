@@ -29,17 +29,19 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Concurrency}
+\begin{frame}[fragile]
+\frametitle{Concurrency}
   \begin{itemize}
     \item Go statement -- spawn threads
     \item Channels -- send and receive messages
-    \item Others -- WaitGroup, do.Once, etc
+    \item Others -- WaitGroup, do.Once, etc    
   \end{itemize}
 \end{frame}
 
 \begin{frame} [fragile]
 \frametitle{Go-routines}
 \begin{itemize}
+  \item Call \verb=runtime.GOMAXPROCS(n)= to run on multiple processors
   \item \verb=go= statement $\approx$ \verb=async= in X10
 \end{itemize}
 \begin{center}
@@ -50,7 +52,6 @@
 \begin{itemize}
 \item Starts \verb=mapblock= in a new thread
 \item \verb=mapblock= becomes a go-routine
-\item Need to call \verb=runtime.GOMAXPROCS= to run on multiple processors
 \end{itemize}
 
 \end{frame}
@@ -84,7 +85,7 @@
 \begin{frame}[fragile]
 \frametitle{Channels}
 \begin{itemize}
-\item Channels can be used to model \verb=finish= like behavior
+\item Channels can be used to model X10's \verb=finish= statement
 \end{itemize}
 \begin{verbatim}
         var ch = make(chan bool)
@@ -107,14 +108,32 @@
 \end{frame}
 
 
-\begin{frame} {WaitGroup}
+\begin{frame} [fragile]
+\frametitle{WaitGroup}
+\begin{itemize}
+\item A better construct to model X10's \verb=finish= statement
+\end{itemize}
+\begin{verbatim}
+        var wg sync.WaitGroup
+        for i:=0; i < n ; i++ {
+                wg.Add(1)
+                go func() { 
+                        // do something
+                        wg.Done()
+                } ()                
+        }
+        wg.Wait() // wait for all go-routines to finish
+\end{verbatim}
+
 
 \end{frame}
 
 \begin{frame}[fragile] 
 \frametitle{Map Reduce}
 \begin{itemize}
-  \item Implemented $\frac{n}{k}$ version of map reduce
+  \item Sequential version
+  \item Implemented $\frac{n}{k}$ version of map reduce using arrays
+  \item Streaming version of map reduce using channels
 \end{itemize}
 \end{frame}
 
