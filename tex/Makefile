@@ -1,13 +1,23 @@
-OUT=presentation.pdf
-SRC=presentation.tex
-all: $(OUT)
+PRESENTATION=presentation.pdf
+PRESENTATION_SRC=presentation.tex
+MANUAL=manual.pdf
+MANUAL_SRC=manual.tex
+MANUAL_BIB=manual
 
-$(OUT): $(SRC)
+all: $(PRESENTATION) $(MANUAL)
+
+$(PRESENTATION): $(PRESENTATION_SRC)
+	pdflatex $<
+	pdflatex $<
+
+$(MANUAL): $(MANUAL_SRC) 
+	pdflatex $<
+	bibtex $(MANUAL_BIB)
 	pdflatex $<
 	pdflatex $<
 
 view:
-	evince $(OUT) &
+	evince $(PRESENTATION) &
 
 .PHONY: clean
 

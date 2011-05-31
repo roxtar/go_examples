@@ -1,0 +1,121 @@
+\documentclass[8pt, twocolumn]{article}
+\usepackage{hyperref}
+\hypersetup{
+colorlinks=true,
+linkcolor=blue,
+citecolor=blue,
+urlcolor=blue,
+}
+
+\title{Parallel Programming in Go \\
+\small{http://www.golang.org}
+} 
+\author{
+  Raghu Prabhakar
+  \\raghu@cs.ucla.edu
+  \and 
+  Rohit Kumar 
+  \\rohitkk@cs.ucla.edu
+}
+
+\begin{document}
+
+\maketitle
+\section{Abstract}
+The Go programming language was released by Google in November
+2009. The language was designed and implemented by the creators of
+Unix: Rob Pike and Ken Thompson. It's a general purpose programming
+language with constructs for concurrency. This manual gives a brief
+overview of the language's support for concurrency.\\
+\section{Introduction}
+Go was designed as a general purpose system's programming language. It
+borrows from C (pointers, goto), Newsqueak (channels). It has garbage
+collection, is statically typed and has compilers on Windows, Linux
+and MacOS X. 
+\section{Goroutines}
+Goroutines are functions executing in a separate thread. To start a
+goroutine, you prefix the function call with the \verb=go= keyword.
+\begin{verbatim}
+        go map_block(start, end)
+\end{verbatim}
+The above statement will start the \verb=map_block= function as a
+goroutine in a separate thread. This is an asynchronous call and the
+control will not wait for the execution of \verb=map_block= to finish
+before executing the next command. When the goroutine finishes it will
+exit silently. The goroutine shares the same memory
+as other goroutines and the main thread of execution. Multiple
+goroutines might be multiplexed on the same system thread.\\
+
+Currently by default the Go runtime will only use one processor. To
+use more than one processor, one should call the
+\verb=runtime.GOMAXPROCS= function. For example:
+\begin{verbatim}
+        import ("runtime")        
+        func main() {
+                runtime.GOMAXPROCS(4)
+        }
+\end{verbatim}
+The above code instructs the runtime to use 4 processors.
+
+\section{Channels}
+Channels are the main form of syncrhonization provided by the Go
+language. They can be used to send and receive values between
+goroutines. Channels are typed.
+\begin{verbatim}
+    1    ch := make(chan int)                         
+    2    go func() {
+    3            v:= <-ch)
+    4    }()
+    5    ch <- 23  
+\end{verbatim}
+On Line 1 we create a new channel using Go's \verb=make=
+statement. The default channels are unbuffered and will block on both
+send and receive. We then spawn a new goroutine which receives a value
+from the channel (Line 3). Finally we send a the number \verb=23=
+through the channel (Line 5).\\
+
+To send a value through a channel one uses the \verb=<-= with
+the channel on the left hand side (Line 5). To receive a value the
+channel is on the right hand side of the \verb=<-= operator. \\
+
+The order of send and receive is important. If we had done
+\verb=ch<-23= before Line 2. The program would block and never execute
+the \verb=go= statement. This is because an unbuffered channel blocks
+both on a send and a receive \cite{effectivego}.
+
+Channels can also be used to wait for goroutines to finish. For
+example:
+\begin{verbatim}
+    1     ch := make(chan bool)
+    2     for i:=0; i<n; i++ {
+    3             go func() {
+    4             //do something
+    5                     ch <- true
+    6             }()
+    7     }
+    8     for i:=0; i<n; i++ {
+    9             <-ch 
+    10    } 
+\end{verbatim}
+In the above code snippet we spawn an anonymous goroutine \verb=n=
+times (Line 3). Each one of these goroutines sends a value \verb=true=
+on the channel \verb=ch= after it has finished its task. In the main
+goroutine we wait for all child goroutines to finish by receiving the
+values on the channels and discarding them (Line 9). We know that
+after Line 10, all the spawned goroutines have finished.\\
+
+There are other patterns of using channels, many of
+which are illustrated in \cite{effectivego}.
+
+\section{WaitGroup}
+\section{Select}
+\section{Locks}
+Within the \verb=sync= package, which comes with the standard Go
+distribution, there are two types of locks: Mutex and Reader Writer
+Lock. The recommended way of synchronizing is channels. The locks
+provided here are used to build higher level synchronization
+mechanisms. See \cite{sync} for more details.
+\section{Once}
+\bibliography{manual}
+\bibliographystyle{plain}
+\end{document}
