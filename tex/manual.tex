@@ -8,14 +8,14 @@ urlcolor=blue,
 }
 
 \title{Parallel Programming in Go \\
-\small{http://www.golang.org}
+\small{\url{http://www.golang.org}}
 } 
 \author{
   Raghu Prabhakar
-  \\raghu@cs.ucla.edu
+  \\\small{raghu@cs.ucla.edu}
   \and 
   Rohit Kumar 
-  \\rohitkk@cs.ucla.edu
+  \\\small{rohitkk@cs.ucla.edu}
 }
 
 \begin{document}
@@ -29,7 +29,7 @@ language with constructs for concurrency. This manual gives a brief
 overview of the language's support for concurrency.\\
 \section{Introduction}
 Go was designed as a general purpose system's programming language. It
-borrows from C (pointers, goto), Newsqueak (channels). It has garbage
+borrows from C (pointers, goto), Newsqueak (channels) \cite{gofaq}. It has garbage
 collection, is statically typed and has compilers on Windows, Linux
 and MacOS X. 
 \section{Goroutines}
@@ -106,9 +106,35 @@ after Line 10, all the spawned goroutines have finished.\\
 
 There are other patterns of using channels, many of
 which are illustrated in \cite{effectivego}.
-
 \section{WaitGroup}
+Waitgroups are a better construct to syncrhonize the completion of
+goroutines. They are present in the \verb=sync= package. The same code
+listed in the previous section can be rewritten using a
+\verb=WaitGroup=. 
+\begin{verbatim}
+    1     var wg sync.WaitGroup
+    2     for i:=0; i<n; i++ {
+    3             wg.Add(1)
+    4             go func() {
+    5             //do something
+    6                     wg.Done()
+    7             }()
+    8     }
+    9     wg.Wait()
+    10    } 
+\end{verbatim}
+Here we see that the main goroutine calls add to set the number of
+goroutines to wait for (Line 3). When each goroutine has finished execution, it
+calls the \verb=Done= method (Line 6). The main routine waits for the
+all the child goroutines to finish by calling \verb=Wait= (Line 9) \cite{sync}.
+
 \section{Select}
+The \verb=select= statement is used to choose a send or receive from a
+set of channels. The statement is structured like a \verb=switch=
+statement, with each case being either a send to or a receive from a
+channel. Each of these cases is evaluated from the top to bottom. Out
+of all the send/receive expressions which can proceed one is selected
+and executed. See \cite{golangspec} for examples.
 \section{Locks}
 Within the \verb=sync= package, which comes with the standard Go
 distribution, there are two types of locks: Mutex and Reader Writer
@@ -116,6 +142,26 @@ Lock. The recommended way of synchronizing is channels. The locks
 provided here are used to build higher level synchronization
 mechanisms. See \cite{sync} for more details.
 \section{Once}
-\bibliography{manual}
+The \verb=Once= structure can be used to execute a particular function
+only one time. For example:
+\begin{verbatim}
+    1     var once sync.Once
+    2     for i:=0; i<n; i++ {
+    3             go func() {
+    4                     //do something
+    5                     once.Do(cleanup)
+    6             }()
+    9     }
+\end{verbatim}
+In the above code although multiple goroutines will reach Line 5, only
+one of them will get to execute the \verb=cleanup= function.
+\section{Conclusion}
+The Go programming language has been around for almost 2 years. Although
+it was experimental when it was released it has since been deployed in
+production environments \cite{heroku}. Given that it's general
+purpose, imperative, easy to learn and provides native concurrency
+primitives, we believe that it will be adopted by many more developers in the
+future.
+\bibliography{manual} 
 \bibliographystyle{plain}
 \end{document}
