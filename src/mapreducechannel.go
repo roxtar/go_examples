@@ -38,9 +38,9 @@ func main() {
 
 	runtime.GOMAXPROCS(nprocs)
 
-	map_in := make(chan int64)
-	map_out := make(chan int64)
-	reduce_out := make(chan int64)
+	map_in := make(chan int64, n)
+	map_out := make(chan int64, n)
+	reduce_out := make(chan int64, n)
 
 	go do_map(map_in, map_out)
 	go do_reduce(map_out, reduce_out)

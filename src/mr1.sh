@@ -1,0 +1,1 @@
+time for i in `seq 1 200`; do ./pmapreduce.out -n 1; done
