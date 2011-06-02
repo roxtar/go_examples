@@ -51,10 +51,11 @@ goroutine, you prefix the function call with the \verb=go= keyword.
 The above statement will start the \verb=map_block= function as a
 goroutine in a separate thread. This is an asynchronous call and the
 control will not wait for the execution of \verb=map_block= to finish
-before executing the next statement. When the goroutine finishes it will
-exit silently. The goroutine shares the same memory
-as other goroutines and the main thread of execution. Multiple
-goroutines might be multiplexed on the same system thread.\\
+before executing the next statement\cite{golangspec}. When the
+goroutine finishes it will exit silently. The goroutine shares the
+same memory as other goroutines and the main thread of
+execution. Multiple goroutines might be multiplexed on the same system
+thread.\\
 
 By default the Go runtime will only use one processor to schedule
 goroutines. To use more than one processor, one should call the
