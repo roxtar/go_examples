@@ -9,7 +9,7 @@ func prefix_sum(a[] int64) {
 }
 
 func main() {
-	const n = 300000
+	const n = 30000000
 	a := make([] int64, n)
 	for i, _ := range a {
 		a[i] = int64(i)

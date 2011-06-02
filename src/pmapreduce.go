@@ -2,10 +2,10 @@ package main
 import (
 	"fmt"
 	"runtime"
+	"flag"
 )
 const n = 3000000
-const nprocs = 4
-
+var nprocs = 1
 func do_map(a []int64) {
 
 	block_size := n/nprocs;
@@ -71,6 +71,8 @@ func f(x  int64) int64{
 
 
 func main() {
+	flag.IntVar(&nprocs, "n", 1, "Number of threads")
+	flag.Parse()
 	runtime.GOMAXPROCS(nprocs)
 	a := make([] int64, n)
 	var i int64;
