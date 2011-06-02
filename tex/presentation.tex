@@ -22,7 +22,7 @@
   \item New language developed by Google. Released in 2009.
   \item Rob Pike, Ken Thompson, Robert Griesemer
   \item Borrows from C, Newsqueak.
-  \item Compiled, garbage collected, concurrent, statically typed,
+  \item Compiled, garbage collected (mark and sweep), concurrent, statically typed,
     imperative, native UTF-8 support.
   \item Compilers: 6g, 8g, gcc 
 \end{itemize}
@@ -195,7 +195,6 @@ func main() {
 \begin{frame}
   \frametitle{Go Idiosyncracies}
   \begin{itemize}
-   \item Mark-and-sweep garbage collector.
    \item Compile-time error on unused imported packages, variables.
    \item Functions can return multiple return values.
    \item No while loop - 'for' is the only looping construct.
@@ -203,6 +202,13 @@ func main() {
   \end{itemize}
 
 \end{frame}
+
+\begin{frame}
+\begin{center}
+ Thanks !
+\end{center}
+\end{frame}
+
 
 
 \end{document}
