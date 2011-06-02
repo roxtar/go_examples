@@ -5,13 +5,13 @@ import (
 	"runtime"
 )
 
-const N int64 = 30000000
-const NPROCS int64 = 2
+const N = 30000000
+const NPROCS = 4
 var a [N]int64
 
 func doInit() {
 	for i :=0; i<len(a); i++ {
-		a[i] = 1
+		a[i] = int64(i)
 	}
 }
 
@@ -21,43 +21,45 @@ func doParallelPrefixMain() {
 	
 	//Initialize all channels
 	finish = make(chan bool, NPROCS)
-	for i:= int64(0); i<NPROCS; i++ {
+	for i:= 0; i<NPROCS; i++ {
 		ch[i] = make(chan int64, NPROCS)
 	}
 	
 	//Launch all threads
-	for i:=int64(0); i<NPROCS; i++ {
-		go threadParallelPrefix(i, ch, finish)
+	for i:=0; i<NPROCS; i++ {
+		go threadParallelPrefix(i, ch[:], finish)
 	}
 	
-	//Equivalent to a reduce
-	for i:=int64(0); i<NPROCS; i++ {
+	//Equivalent to a finish
+	for i:=0; i<NPROCS; i++ {
 		<- finish
 	}
+	fmt.Printf("%v\n", a[N-1])
 	
 }
 
-func threadParallelPrefix(pid int64, ch [NPROCS]chan int64, finish chan bool) {
+func threadParallelPrefix(pid int, ch []chan int64, finish chan bool) {
 	//First do a local parallel prefix computation
-	var startIndex int64 = pid*N/NPROCS
+	var startIndex int64 = int64(pid) * N/NPROCS
 	var endIndex int64 = startIndex + (N/NPROCS)
-	var localSum int64 = a[startIndex]
-	for i:=startIndex+1; i<endIndex; i++ {
-		localSum += a[i]
-		a[i] = localSum
+	var toBeAdded int64 = 0
+
+	for i:=startIndex+1; i<endIndex; i++ {		
+		a[i] = a[i] + a[i-1]
 	}
 	
-	for i:= pid+1; i<NPROCS; i++ {
-		
-		ch[i] <- localSum
+	for i:= pid+1; i<NPROCS; i++ {		
+		ch[i] <- a[i-1]
 	}
 	
-	for i := int64(0); i<pid; i++ {
-		toBeAdded := <- ch[pid]
-		for j:=startIndex; j<endIndex; j++ {
-			a[j] += toBeAdded
-		}
+	for i:=0; i < pid; i++ {
+		 toBeAdded += <- ch[pid]
 	}
+			
+	for j:=startIndex; j<endIndex; j++ {
+		a[j] += toBeAdded
+	}
+
 	 
 	finish <- true
 	
@@ -72,6 +74,4 @@ func main() {
 	runtime.GOMAXPROCS(int(NPROCS))
 	doInit()
 	doParallelPrefixMain()
-//	printArray();
-// 	fmt.Println("Hello world!!")
 }
