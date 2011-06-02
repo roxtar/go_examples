@@ -7,12 +7,13 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
+	"flag"
 	);
 
 const inv_sqrt_2xPI=0.39894228040143270286;
 const NUM_RUNS = 100;
 const N=65536;
-const NTHREADS=2;
+
 	
 type OptionData struct {
         s float64;          // spot price
@@ -192,6 +193,9 @@ func bs_thread(tid int, finish chan bool) {
 
 
 func main () {
+    var NTHREADS int
+    flag.IntVar(&NTHREADS, "n", 1, "Number of threads")
+	flag.Parse()
     fmt.Println("PARSEC Benchmark Suite\n");
     //Read input data from file 
     inputFile := "in_64K.txt"
