@@ -158,7 +158,6 @@ func main() {
 \item The \verb=select= statement
 \item sync.Once.Do
 \item Locks and mutexes
-\item More in the \verb=sync= package
 \item \verb=netchan= 
 \end{itemize}
 \end{frame}
@@ -168,8 +167,8 @@ func main() {
 \frametitle{Map Reduce}
 \begin{itemize}
   \item Sequential
-  \item $\frac{n}{k}$ version of map reduce using arrays
-  \item Streaming map reduce using channels
+  \item $\frac{n}{k}$ version of map reduce 
+  \item Streaming map reduce 
 \end{itemize}
 \end{frame}
 
@@ -192,15 +191,15 @@ func main() {
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{Go Idiosyncracies}
   \begin{itemize}
    \item Compile-time error on unused imported packages, variables.
-   \item Functions can return multiple return values.
-   \item No while loop - 'for' is the only looping construct.
-   \item Syntactic issues - Opening curly brace must be in same line.
+   \item Functions can return multiple values.
+   \item No while loop -- \verb=for= is the only looping construct.
+   \item Syntactic issues -- Opening curly brace must be on same line.
+   \item Go has pointers, but no pointer arithmetic. 
   \end{itemize}
-
 \end{frame}
 
 \begin{frame}

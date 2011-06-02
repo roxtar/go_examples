@@ -54,12 +54,15 @@ func threadParallelPrefix(pid int64, ch []chan int64, finish chan bool) {
 		ch[i] <- localSum
 	}
 	
+	var toBeAdded int64 = 0
 	for i := int64(0); i<pid; i++ {
-		toBeAdded := <- ch[pid]
-		for j:=startIndex; j<endIndex; j++ {
-			a[j] += toBeAdded
-		}
+		toBeAdded += <- ch[pid]
 	}
+	
+	for j:=startIndex; j<endIndex; j++ {
+		a[j] += toBeAdded
+	}
+	
 	 
 	finish <- true
 	
