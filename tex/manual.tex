@@ -26,7 +26,7 @@ urlcolor=blue,
 The Go programming language was released by Google in November
 2009. The language was designed and implemented by the creators of
 Unix: Rob Pike and Ken Thompson. It's a general purpose programming
-language with constructs for concurrency. This manual gives a brief
+language intended for systems programming. This manual gives a brief
 overview of the language's support for concurrency.\\
 \section{Introduction}
 Go was designed as a general purpose system's programming language. It
@@ -51,13 +51,13 @@ goroutine, you prefix the function call with the \verb=go= keyword.
 The above statement will start the \verb=map_block= function as a
 goroutine in a separate thread. This is an asynchronous call and the
 control will not wait for the execution of \verb=map_block= to finish
-before executing the next command. When the goroutine finishes it will
+before executing the next statement. When the goroutine finishes it will
 exit silently. The goroutine shares the same memory
 as other goroutines and the main thread of execution. Multiple
 goroutines might be multiplexed on the same system thread.\\
 
-Currently by default the Go runtime will only use one processor. To
-use more than one processor, one should call the
+By default the Go runtime will only use one processor to schedule
+goroutines. To use more than one processor, one should call the
 \verb=runtime.GOMAXPROCS= function. For example:
 \begin{verbatim}
         import ("runtime")        
@@ -68,9 +68,9 @@ use more than one processor, one should call the
 The above code instructs the runtime to use 4 processors.
 
 \section{Channels}
-Channels are the main form of syncrhonization provided by the Go
-language. They can be used to send and receive values between
-goroutines. Channels are typed.
+Channels are the main form of syncrhonization provided by Go. They can
+be used to send and receive values between goroutines. Channels are
+typed.
 \begin{verbatim}
     1    ch := make(chan int)                         
     2    go func() {
@@ -78,19 +78,19 @@ goroutines. Channels are typed.
     4    }()
     5    ch <- 23  
 \end{verbatim}
-On Line 1 we create a new channel using Go's \verb=make=
-statement. The default channels are unbuffered and will block on both
-send and receive. We then spawn a new goroutine which receives a value
-from the channel (Line 3). Finally we send a the number \verb=23=
-through the channel (Line 5).\\
+On Line 1 we create a new channel using \verb=make=. The default
+channels are unbuffered and will block on both send and receive. We
+then spawn a new goroutine which receives a value from the channel
+(Line 3). Finally we send a the number \verb=23= through the channel
+(Line 5).\\
 
-To send a value through a channel one uses the \verb=<-= with
-the channel on the left hand side (Line 5). To receive a value the
-channel is on the right hand side of the \verb=<-= operator. \\
+To send a value through a channel one uses the \verb=<-= with the
+channel on the left hand side (Line 5). To receive a value, place the
+channel on the right hand side of the \verb=<-= operator. \\
 
 The order of send and receive is important. If we had done
 \verb=ch<-23= before Line 2. The program would block and never execute
-the \verb=go= statement. This is because an unbuffered channel blocks
+the \verb=go= statement. As an unbuffered channel blocks
 both on a send and a receive \cite{effectivego}.
 
 Channels can also be used to wait for goroutines to finish. For
@@ -109,10 +109,10 @@ example:
 \end{verbatim}
 In the above code snippet we spawn an anonymous goroutine \verb=n=
 times (Line 3). Each one of these goroutines sends a value \verb=true=
-on the channel \verb=ch= after it has finished its task. In the main
-goroutine we wait for all child goroutines to finish by receiving the
-values on the channels and discarding them (Line 9). We know that
-after Line 10, all the spawned goroutines have finished.\\
+on the channel \verb=ch= after it has finished its task (Line 5). In
+the main goroutine we wait for all child goroutines to finish by
+receiving the values on the channels and discarding them (Line 9). We
+know that after Line 10, all the spawned goroutines have finished.\\
 
 There are other patterns of using channels, many of
 which are illustrated in \cite{effectivego}.
@@ -134,9 +134,10 @@ listed in the previous section can be rewritten using a
     10    } 
 \end{verbatim}
 Here we see that the main goroutine calls add to set the number of
-goroutines to wait for (Line 3). When each goroutine has finished execution, it
-calls the \verb=Done= method (Line 6). The main routine waits for the
-all the child goroutines to finish by calling \verb=Wait= (Line 9) \cite{sync}.
+goroutines to wait for (Line 3). When each goroutine has finished
+execution, it calls the \verb=Done= method (Line 6) on the
+\verb=WaitGroup=. The main routine waits for the all the child
+goroutines to finish by calling \verb=Wait= (Line 9) \cite{sync}.
 
 \section{Select}
 The \verb=select= statement is used to choose a send or receive from a
@@ -172,6 +173,7 @@ production environments \cite{heroku}. Given that it's general
 purpose, imperative, easy to learn and provides native concurrency
 primitives, we believe that it will be adopted by many more developers in the
 future.
+\nocite{*}
 \bibliography{manual} 
 \bibliographystyle{plain}
 \end{document}
