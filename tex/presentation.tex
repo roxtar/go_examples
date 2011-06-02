@@ -19,12 +19,11 @@
 
 \begin{frame} {About Go}
 \begin{itemize}
-  \item Developed by Google. Released in 2009.
+  \item New language developed by Google. Released in 2009.
   \item Rob Pike, Ken Thompson, Robert Griesemer
+  \item Borrows from C, Occam and Erlang
   \item Compiled, garbage collected, concurrent, statically typed,
-    imperative. 
-  \item UTF-8 Support
-  \item Borrows from CSP, Occam and Erlang
+    imperative, native UTF-8 support.
   \item Compilers: 6g, 8g, gcc 
 \end{itemize}
 \end{frame}
@@ -34,12 +33,13 @@
   \begin{itemize}
     \item Go statement -- spawn threads
     \item Channels -- send and receive messages
-    \item Others -- WaitGroup, do.Once, etc    
+    \item No distributed arrays. 
+    \item Others -- WaitGroup, Select, do.Once, etc    
   \end{itemize}
 \end{frame}
 
 \begin{frame} [fragile]
-\frametitle{Go-routines}
+\frametitle{Goroutines}
 \begin{itemize}
   \item Call \verb=runtime.GOMAXPROCS(n)= to run on multiple processors
   \item \verb=go= statement $\approx$ \verb=async= in X10
@@ -51,7 +51,7 @@
 \end{center}
 \begin{itemize}
 \item Starts function \verb=mapblock= in a new thread with arguments \verb=start= and \verb=end=
-\item \verb=mapblock= is called a go-routine
+\item \verb=mapblock= is called a goroutine
 \end{itemize}
 
 \end{frame}
@@ -59,7 +59,7 @@
 \begin{frame} [fragile]
 \frametitle{Channels}
 \begin{itemize}
-\item Used to send and receive messages
+\item Used to send and receive messages between goroutines.
 \item Channels are typed
 \end{itemize}
 \begin{verbatim}
@@ -124,9 +124,19 @@
         }
         wg.Wait() // wait for all go-routines to finish
 \end{verbatim}
-
-
 \end{frame}
+
+\begin{frame} [fragile]
+\frametitle{Other Things}
+\begin{itemize}
+\item The \verb=select= statement
+\item sync.Once.Do
+\item Locks and mutexes
+\item More in the \verb=sync= package
+\item \verb=netchan= 
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile] 
 \frametitle{Map Reduce}
@@ -140,14 +150,8 @@
 \begin{frame} {Parallel Prefix Sum}
 \end{frame}
 
-\begin{frame} [fragile]
-\frametitle{Other Things}
-\begin{itemize}
-\item The \verb=select= statement
-\item sync.Once.Do
-\item Locks and mutexes
-\item More in the \verb=sync= package
-\end{itemize}
+\begin{frame} {Black Scholes}
 \end{frame}
+
 
 \end{document}

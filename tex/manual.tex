@@ -30,9 +30,18 @@ language with constructs for concurrency. This manual gives a brief
 overview of the language's support for concurrency.\\
 \section{Introduction}
 Go was designed as a general purpose system's programming language. It
-borrows from C (pointers, goto), Newsqueak (channels) \cite{gofaq}. It has garbage
-collection, is statically typed and has compilers on Windows, Linux
-and MacOS X. 
+borrows from C (pointers, goto), Newsqueak (channels) \cite{gofaq}. It
+has garbage collection, is statically typed and has compilers on
+Windows, Linux and MacOS X.\\
+
+The primitives for concurrency present in Go are similar to those
+in CSP \cite{goblog}. Goroutines are used to spawn new threads of
+execution and channels are used to communicate between
+goroutines. Although this model of concurrency is the recommended one,
+the programmer can choose to use shared memory and locks. The
+following sections talk about Go's concurrency primitives and their
+usage.
+
 \section{Goroutines}
 Goroutines are functions executing in a separate thread. To start a
 goroutine, you prefix the function call with the \verb=go= keyword.
