@@ -61,10 +61,8 @@ func threadParallelPrefix(pid int, ch []chan int64, finish chan bool) {
 	for j:=startIndex; j<endIndex; j++ {
 		a[j] += toBeAdded
 	}
-
 	 
-	finish <- true
-	
+	finish <- true	
 }  
 func printArray() {
 for i:=0; i<len(a); i++ {

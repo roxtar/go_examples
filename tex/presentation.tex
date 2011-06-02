@@ -174,9 +174,38 @@ func main() {
 \end{frame}
 
 \begin{frame} {Parallel Prefix Sum}
+\begin{itemize}
+  \item Sequential version.
+  \item $\frac{n}{k}$ version of parallel prefix
+  \item Channels to communicate intermediate sums to other processes.
+\end{itemize}
+
 \end{frame}
 
 \begin{frame} {Black Scholes}
+  \begin{itemize}
+   \item Calculates the prices for a portfolio of European options analytically with the Black-Scholes PDE
+   \item Data-parallel application from the PARSEC Benchmark Suite
+   \item Originally written in C with pthreads/OpenMP
+   \item Ported to Go.
+	  
+  \end{itemize}
+
+
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Go Idiosyncracies}
+  \begin{itemize}
+   \item Mark-and-sweep garbage collector.
+   \item Compile-time error on unused imported packages, variables.
+   \item Functions can return multiple return values.
+   \item No while loop - 'for' is the only looping construct.
+   \item Syntactic issues - Opening curly brace must be in same line.
+  \end{itemize}
+
 \end{frame}
 
 
