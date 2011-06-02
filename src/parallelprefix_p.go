@@ -3,10 +3,11 @@ package main;
 import (
 	"fmt"
 	"runtime"
+	"flag"
 )
 
 const N = 30000000
-const NPROCS = 4
+var NPROCS = 4
 var a [N]int64
 
 func doInit() {
@@ -16,11 +17,12 @@ func doInit() {
 }
 
 func doParallelPrefixMain() {
-	var ch [NPROCS]chan int64
+	var ch []chan int64
 	var finish chan bool
 	
 	//Initialize all channels
 	finish = make(chan bool, NPROCS)
+	ch = make([] chan int64, NPROCS)
 	for i:= 0; i<NPROCS; i++ {
 		ch[i] = make(chan int64, NPROCS)
 	}
@@ -40,8 +42,8 @@ func doParallelPrefixMain() {
 
 func threadParallelPrefix(pid int, ch []chan int64, finish chan bool) {
 	//First do a local parallel prefix computation
-	var startIndex int64 = int64(pid) * N/NPROCS
-	var endIndex int64 = startIndex + (N/NPROCS)
+	var startIndex int64 = int64(pid) * N/int64(NPROCS)
+	var endIndex int64 = startIndex + (N/int64(NPROCS))
 	var toBeAdded int64 = 0
 
 	for i:=startIndex+1; i<endIndex; i++ {		
@@ -71,6 +73,8 @@ for i:=0; i<len(a); i++ {
 }
 
 func main() {
+	flag.IntVar(&NPROCS, "n", 1, "Number of threads")
+	flag.Parse()
 	runtime.GOMAXPROCS(int(NPROCS))
 	doInit()
 	doParallelPrefixMain()
